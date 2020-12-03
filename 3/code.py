@@ -1,6 +1,8 @@
 def CreateGrid():
     f = open("input.txt", "r")
     lines = f.readlines()
+    for i in range(len(lines)-1):
+        lines[i] = lines[i][:-1]
     return lines
 
 def FindTrees(grid):
@@ -11,7 +13,7 @@ def FindTrees(grid):
     #print(width)
     #for y in range(1, 34):
     for y in range(1,len(grid)):
-        tempX = x % len(grid[y])
+        tempX = x % width
         if len(grid[y]) != width:
             print("width changed on "+str(y)+" to "+str(len(grid[y])))
         char = grid[y][tempX]
