@@ -5,17 +5,12 @@ def CreateGrid():
         lines[i] = lines[i][:-1]
     return lines
 
-def FindTrees(grid):
-    x = 3
+def FindTrees(grid, xIncrease, yIncrease):
+    x = 0
     trees = 0
-    print(len(grid))
     width = len(grid[0])
-    #print(width)
-    #for y in range(1, 34):
-    for y in range(1,len(grid)):
+    for y in range(0, len(grid),yIncrease):
         tempX = x % width
-        if len(grid[y]) != width:
-            print("width changed on "+str(y)+" to "+str(len(grid[y])))
         char = grid[y][tempX]
         tempLine = list(grid[y])
         if char == '#':
@@ -24,7 +19,7 @@ def FindTrees(grid):
         else:
             tempLine[tempX] = 'O'
         #print("".join(tempLine))
-        x += 3
+        x += xIncrease
     return trees
 
-print(FindTrees(CreateGrid()))
+print(FindTrees(CreateGrid(),3,1))
