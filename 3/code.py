@@ -22,4 +22,16 @@ def FindTrees(grid, xIncrease, yIncrease):
         x += xIncrease
     return trees
 
-print(FindTrees(CreateGrid(),3,1))
+slopeGrid = CreateGrid()
+r1d1 = FindTrees(slopeGrid, 1, 1)
+r3d1 = FindTrees(slopeGrid, 3, 1)
+r5d1 = FindTrees(slopeGrid, 5, 1)
+r7d1 = FindTrees(slopeGrid, 7, 1)
+r1d2 = FindTrees(slopeGrid, 1, 2)
+
+print("R1 D1: ",r1d1)
+print("R3 D1: ",r3d1)
+print("R5 D1: ",r5d1)
+print("R7 D1: ",r7d1)
+print("R1 D2: ",r1d2)
+print("Product: ",r1d1*r3d1*r5d1*r7d1*r1d2)
