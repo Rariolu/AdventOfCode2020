@@ -27,16 +27,19 @@ def GetValidPassports(passports, expectedFields):
         missingFields = []
         for k in range(len(expectedFields)):
             field = expectedFields[k]
-            if field in passport:
-                fieldIndex = cleanPassport.index(field)
+            fieldName = field.fieldName
+            if fieldName in passport:
+                fieldIndex = cleanPassport.index(fieldName)
                 colonIndex = cleanPassport.find(":",fieldIndex)
                 spaceIndex = cleanPassport.find(" ",colonIndex)
                 #newLineIndex = passport.find("\n",colonIndex)
                 breakIndex = spaceIndex#min(spaceIndex,newLineIndex)
                 data = passport[(colonIndex+1):breakIndex]
+                if field.CheckValidity(data):
+                    fieldsFound += 1
                 #print(data)
                 #print("fieldIndex:",fieldIndex,"; colonIndex: ",colonIndex,"; spaceIndex: ",spaceIndex,"newLineIndex",newLineIndex,"breakIndex",breakIndex,data)
-                fieldsFound += 1
+                #fieldsFound += 1
             else:
                 missingFields.append(field)
         if fieldsFound == len(expectedFields):
@@ -53,11 +56,11 @@ class PassportField:
     def __init__(self, fieldName, fieldType):
         self.fieldName = fieldName
         self.fieldType = fieldType
-    def __init__(self, fieldName, fieldType, minValue, maxValue):
-        self.fieldName = fieldName
-        self.fieldType = fieldType
+
+    def SetRange(self, minValue, maxValue):
         self.minValue = minValue
         self.maxValue = maxValue
+
     def CheckValidity(self, data):
         typ = self.fieldType
         if typ == "4dnum":
@@ -103,6 +106,7 @@ class PassportField:
             if IntTryParse(data) == False:
                 return False
             return True
+
 def IntTryParse(text):
     try:
         i = int(text)
@@ -110,8 +114,23 @@ def IntTryParse(text):
     except:
         return False
 
+byr = PassportField("byr","4dnum")
+byr.SetRange(1920, 2002)
+
+iyr = PassportField("iyr","4dnum")
+iyr.SetRange(2010,2020)
+
+eyr = PassportField("eyr","4dnum")
+eyr.SetRange(2020,2030)
+
+hgt = PassportField("hgt", "len")
+hcl = PassportField("hcl", "hexcolour")
+ecl = PassportField("ecl", "explicitcolour")
+pid = PassportField("pid", "9dnum")
+fieldRules = [byr,iyr,eyr,hgt,hcl,ecl,pid]
+
 passports = GetPassports()
-validPassports = GetValidPassports(passports, ["byr","iyr","eyr","hgt","hcl","ecl","pid"])
+validPassports = GetValidPassports(passports, fieldRules)
 """for i in range(len(validPassports)):
     print(validPassports[i],"\n")"""
 print(len(validPassports))
