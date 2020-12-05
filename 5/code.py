@@ -8,7 +8,6 @@ def GetSeatSpecs():
     return lines
 
 def ParseSeatSpecRec(spec, specIndex, minRange, maxRange):
-    #print("spec:",spec,"; specIndex: ",specIndex,"; minRange:",minRange,"; maxRange :",maxRange)
     if specIndex >= len(spec):
         return (minRange,maxRange)
     diff = maxRange - minRange
@@ -44,7 +43,6 @@ class Seat:
 
 def ParseSeats(seatSpecs):
     seats = []
-    #for i in range(3):
     for i in range(len(seatSpecs)):
         seats.append(Seat(seatSpecs[i]))
     return seats
@@ -56,6 +54,21 @@ def HighestSeatNumber(seats):
             highestSeatNo = seats[i].seatID
     return highestSeatNo
 
+def FindFreeSeat(seats,seatCount):
+    seatIDs = list(range(seatCount))
+    confirmedSeatIDs = []
+    for i in range(len(seats)):
+        if seats[i].seatID in seatIDs:
+            seatIDs.remove(seats[i].seatID)
+            confirmedSeatIDs.append(seats[i].seatID)
+    for i in range(len(seatIDs)):
+        prev = seatIDs[i]-1
+        nxt = seatIDs[i]+1
+        if prev in confirmedSeatIDs and nxt in confirmedSeatIDs:
+            return seatIDs[i]
+    return -1
+
 seatspecs = GetSeatSpecs()
 seats = ParseSeats(seatspecs)
 print(HighestSeatNumber(seats))
+print(FindFreeSeat(seats,1024))
