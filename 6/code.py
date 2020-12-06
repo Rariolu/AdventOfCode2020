@@ -9,6 +9,23 @@ class Group:
         self.people = []
     def AddPerson(self, person):
         self.people.append(person)
+    def FindCommonAffirmatives(self):
+        affirmatives = {}
+        for i in range(len(self.people)):
+            person = self.people[i]
+            affs = person.affirmatives
+            for j in range(len(affs)):
+                if affs[j] in affirmatives:
+                    affirmatives[affs[j]]+=1
+                else:
+                    if i == 0:
+                        affirmatives[affs[j]]=1
+        mutual = []
+        for i in affirmatives:
+            if affirmatives[i] == len(self.people):
+                mutual.append(i)
+        #print(mutual)
+        return mutual
 
 def GetGroups():
     f = open("input.txt","r")
@@ -38,5 +55,14 @@ def ParseGroups(answerGroups):
     print("Total Affirmatives:",totalYes)
     return groups
 
+def FindTotalMutualAffirmatives(parsedGroups):
+    total = 0
+    for i in range(len(parsedGroups)):
+        mutualAffirmatives = parsedGroups[i].FindCommonAffirmatives()
+        total += len(mutualAffirmatives)
+    print("Total Mutual Affirmatives:",total)
+    return total
+
 groupAnswers = GetGroups()
 groups = ParseGroups(groupAnswers)
+FindTotalMutualAffirmatives(groups)
